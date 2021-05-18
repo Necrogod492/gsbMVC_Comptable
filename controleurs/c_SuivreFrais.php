@@ -16,7 +16,14 @@ switch($action){
         $lesFiches = $pdo -> getLesFicheFrais($leVisiteur);
         if ($lesFiches != null) {
         include("vues/v_validerFrais.php"); 
-        } else { 
+        } else if ($lesFiches == null){ 
+            ajouterErreur("Ce visiteur n'a aucune fiche a sa disposition");
+            include ("vues/v_erreurs.php");
+            $lesVisiteurs = $pdo-> getLesVisiteurs($idComptable);
+            $lesCles = array_keys($lesVisiteurs);
+            $visiteurASelectionner = $lesCles[0];
+            include("vues/v_choixVisiteur.php");
+        }else{
             include ("vues/v_erreurs.php");
         }
         break;
