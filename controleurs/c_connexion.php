@@ -10,20 +10,41 @@ switch($action){
 	}
 	case 'valideConnexion':{
 		$login = $_REQUEST['login'];
-		$mdp = md5($_REQUEST['mdp']);
+		$mdp = $_REQUEST['mdp'];
+                $options= $_REQUEST['options'];
+		$visiteur = $pdo->getInfosVisiteur($login,$mdp);
 		$comptable = $pdo->getInfosComptable($login,$mdp);
-		if(!is_array( $comptable)){
+		if ($options=="visiteur") {
+		if(is_array( $visiteur)){
+			$id = $visiteur['id'];
+			$nom =  $visiteur['nom'];
+			$prenom = $visiteur['prenom'];
+			connecter($id,$nom,$prenom);
+			include("vues/v_sommaire.php");
+		
+                    }
+                    else {
 			ajouterErreur("Login ou mot de passe incorrect");
 			include("vues/v_erreurs.php");
 			include("vues/v_connexion.php");
-		}
-		else{
+                    }
+                }
+		if ($options=="comptable") {
+		if(is_array( $comptable)){
 			$id = $comptable['id'];
 			$nom =  $comptable['nom'];
 			$prenom = $comptable['prenom'];
 			connecter($id,$nom,$prenom);
 			include("vues/v_sommaire.php");
 		}
+		
+		else {
+			ajouterErreur("Login ou mot de passe incorrect");
+			include("vues/v_erreurs.php");
+			include("vues/v_connexion.php");
+                    }
+                }
+		
 		break;
 	}
 	default :{

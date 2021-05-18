@@ -19,11 +19,12 @@ switch($action){
         } else { 
             include ("vues/v_erreurs.php");
         }
+        break;
     }
     case 'pdf' :{
        $idVisiteur = $_SESSION['idVisiteur'];
        $comptable = $_SESSION['nom']." ".$_SESSION['prenom'];
-       $visiteur = $pdo-> getInfosVisiteur($idVisiteur);
+       $visiteur = $pdo-> getVisiteur($idVisiteur);
        $leMois = $_GET['mois'];
        $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($idVisiteur,$leMois);
        $lesFraisForfait= $pdo->getLesFraisForfait($idVisiteur,$leMois);
@@ -37,6 +38,7 @@ switch($action){
        $dateModif =  dateAnglaisVersFrancais($dateModif);
        include ('vues/v_pdf.php');
        creerPdf($lesFraisForfait, $lesFraisHorsForfait, $numAnnee, $numMois, $libEtat, $montantValide, $nbJustificatifs, $dateModif,$comptable,$visiteur);
+       break;
     }
     
     case 'rembourser' :{
@@ -44,6 +46,7 @@ switch($action){
         $leMois = $_GET['mois'];
         $pdo-> remboursement($idVisiteur, $leMois);
         include ('vues/v_confirmRB.php');
+        break;
     }
 }
 
